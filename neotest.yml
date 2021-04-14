@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: neo_nginx
+
+spec:
+  containers:
+  - name: nginx
+    imagePullPolicy: IfNotPresent #wrong value: IfNotExist
+    image: antosdoros/neo_anton:v1 #added new image based on neotechdev/nginx:v1 
+
+    livenessProbe: # typofix: livenes
+      httpGet:
+        path: /
+        port: 80
+    
+    resources:
+      requests:
+        memory: 100
+    volumeMounts:
+      - mountPath: /data
+        name: mydata #wrong value: data
+  volumes:
+    - name: mydata
+      hostPath:
+        path: /mnt

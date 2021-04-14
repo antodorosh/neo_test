@@ -1,0 +1,23 @@
+---
+
+- name: configure the master redis server
+  hosts: redis-master
+  roles:
+    - ansible-redis-master
+
+- name: configure redis slaves
+  hosts: redis-slave
+  vars:
+    - redis_slaveof: redis-master.example.com 6379
+  roles:
+    - ansible-redis-master
+
+- name: configure redis sentinel nodes
+  hosts: redis-sentinel
+  vars:
+    - redis_sentinel_monitors:
+      - name: master01
+        host: redis-master.example.com
+        port: 6379
+  roles:
+    - ansible-redis-master
